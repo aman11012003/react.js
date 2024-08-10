@@ -1,0 +1,94 @@
+#Set up the project Make sure you have create-react-app installed. If not, you can install it and set up a new React project:
+
+npx create-react-app crud-app
+cd crud-app
+
+
+#Create the main component  Replace the contents of src/App.js with the following code:
+
+import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [items, setItems] = useState([]);
+  const [input, setInput] = useState('');
+  const [editIndex, setEditIndex] = useState(null);
+
+  const handleAdd = () => {
+    if (input.trim() === '') return;
+    if (editIndex !== null) {
+      // Update existing item
+      const updatedItems = items.map((item, index) =>
+        index === editIndex ? input : item
+      );
+      setItems(updatedItems);
+      setEditIndex(null);
+    } else {
+      // Add new item
+      setItems([...items, input]);
+    }
+    setInput('');
+  };
+
+  const handleEdit = (index) => {
+    setInput(items[index]);
+    setEditIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="App">
+      <h1>CRUD Application</h1>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Enter item"
+      />
+      <button onClick={handleAdd}>{editIndex !== null ? 'Update' : 'Add'}</button>
+      <ul>
+        {items.map((item, index) => (
+          <li key={index}>
+            {item}
+            <button onClick={() => handleEdit(index)}>Edit</button>
+            <button onClick={() => handleDelete(index)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+
+
+#Style the component Optionally, you can add some basic styles in src/App.css:
+
+.App {
+  text-align: center;
+  margin: 20px;
+}
+
+input {
+  margin-right: 10px;
+}
+
+button {
+  margin-left: 5px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}
+
+
+#Run the app Start the React application by running:
+npm start
